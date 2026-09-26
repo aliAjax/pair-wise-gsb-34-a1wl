@@ -61,3 +61,29 @@ CREATE TABLE IF NOT EXISTS audit_log (
   target_id TEXT,
   created_at TEXT
 );
+
+CREATE TABLE IF NOT EXISTS monthly_report_snapshot (
+  id INTEGER PRIMARY KEY,
+  building_id TEXT,
+  month TEXT,
+  status TEXT,
+  metrics TEXT,
+  adjusted_metrics TEXT,
+  details TEXT,
+  adjustments TEXT,
+  archived_at TEXT,
+  archived_by TEXT,
+  generated_at TEXT
+);
+
+CREATE TABLE IF NOT EXISTS report_adjustment (
+  id INTEGER PRIMARY KEY,
+  building_id TEXT,
+  source_month TEXT,
+  adjust_month TEXT,
+  metric TEXT,
+  delta TEXT,
+  reason TEXT,
+  actor TEXT,
+  created_at TEXT
+);

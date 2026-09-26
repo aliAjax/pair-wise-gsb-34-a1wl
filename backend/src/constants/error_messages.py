@@ -1,1 +1,1 @@
-ERROR_MESSAGES = {"AUTH_REQUIRED": "missing token", "RBAC_DENIED": "role denied", "VALIDATION_FAILED": "invalid payload"}
+ERROR_MESSAGES = {"AUTH_REQUIRED": "missing token", "RBAC_DENIED": "role denied", "VALIDATION_FAILED": "invalid payload", "REPORT_ALREADY_ARCHIVED": "monthly report already archived", "REPORT_NOT_ARCHIVED": "source month is not archived yet", "REPORT_MONTH_INVALID": "month must be formatted as YYYY-MM"}

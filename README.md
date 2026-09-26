@@ -57,6 +57,20 @@ backend/src/routes, controllers, services, models, repositories, middlewares, co
 - DeviceType: constants/DeviceType、types/DeviceType、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - InspectionStatus: constants/InspectionStatus、types/InspectionStatus、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - HazardSeverity: constants/HazardSeverity、types/HazardSeverity、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
+- SnapshotStatus: 前端 constants/SnapshotStatus、constants/statusText、types/MonthlyReport、pages/ReportsPage；后端 constants/snapshot_status、services/monthly_report_service、constructors/monthly_report_factory 均有引用。
+- ReportMetric: 前端 constants/ReportMetric、types/ReportAdjustment、pages/ReportsPage、stores/MonthlyReportStore；后端 constants/report_metric、services/report_statistics_service、services/report_adjustment_service 均有引用。
+
+## 月度快照台（合规报表）
+
+报表页 `/reports` 按"楼栋 + 月份"出数，统计口径、归档保存和页面分层实现：
+
+- 统计口径集中在 `backend/src/services/report_statistics_service.py` 与 `constants/report_metric.py`（前端口径文案在 `frontend/src/constants/ReportMetric.ts`）：
+  - 完成率 = 当月已复核任务 ÷ 当月计划任务
+  - 整改及时率 = 当月按时关闭隐患（closed_at ≤ deadline）÷ 当月到期隐患
+  - 逾期维保数 = 维保到期日不超过月末且未完成复核的设备数
+- 归档保存：`POST /api/monthly-report/archive` 月末归档，指标与任务/隐患/设备明细一起冻结进 `monthlyReportSnapshot`；已归档月份只读快照，重复归档返回 `REPORT_ALREADY_ARCHIVED`。
+- 调整单：归档后的更正走 `POST /api/report-adjustment` 另记调整单（来源月必须已归档，否则 `REPORT_NOT_ARCHIVED`），调整额自动并入次月报表，旧月报表保持原样。
+- 未归档月份：`GET /api/monthly-report?building_id=&month=` 按最新记录实时重算，并叠加并入当月的调整单。
 
 ## 为什么会牵一发动全身
 

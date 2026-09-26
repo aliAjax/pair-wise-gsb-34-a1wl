@@ -28,5 +28,17 @@ LOG_TEMPLATES = {
     "HazardTicket.update",
     "HazardTicket.status",
     "HazardTicket.export"
+  ],
+  "MonthlyReportSnapshot": [
+    "MonthlyReportSnapshot.archive",
+    "MonthlyReportSnapshot.recalculate",
+    "MonthlyReportSnapshot.export",
+    "MonthlyReportSnapshot.view"
+  ],
+  "ReportAdjustment": [
+    "ReportAdjustment.create",
+    "ReportAdjustment.merge",
+    "ReportAdjustment.list",
+    "ReportAdjustment.export"
   ]
 }

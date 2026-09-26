@@ -1,0 +1,1 @@
+MonthlyReportPayload = dict

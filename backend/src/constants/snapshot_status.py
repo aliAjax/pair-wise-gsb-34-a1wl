@@ -1,0 +1,1 @@
+SnapshotStatus = ["LIVE", "ARCHIVED"]
