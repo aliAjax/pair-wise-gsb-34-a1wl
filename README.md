@@ -52,11 +52,27 @@ backend/src/routes, controllers, services, models, repositories, middlewares, co
 - 数据库使用命名卷，避免绑定中文路径。
 - 常见问题：端口占用时修改 `.env` 中端口后重启；需要重置数据时执行 `docker compose down -v`。
 
+## 合规报表月度快照台
+
+`/reports` 页为月度快照台，统计口径、归档保存与页面分离：
+
+- 统计口径：`frontend/src/utils/monthlyReportStats.ts`
+  - 完成率 = 当月已复核(REVIEWED)任务 / 当月计划任务（按 plan_date 归属自然月）
+  - 整改及时率 = 按时关闭隐患(closed_at ≤ deadline) / 当月到期隐患（按 deadline 归属自然月，经 InspectionResult → InspectionTask 关联楼栋）
+  - 逾期维保数 = 截至统计日（月末或当天，取较早者）next_maintenance_at 已过期的设备
+- 归档保存：`frontend/src/api/MonthlyReport.ts` + `frontend/src/api/ReportAdjustment.ts`（localStorage 持久化）+ `frontend/src/stores/MonthlyReportStore.ts`
+  - 月末归档把指标与明细冻结为快照，旧月报表保持原样
+  - 归档后的更正登记为调整单（ReportAdjustment），按 target_month 并入次月重算
+  - 未归档月份每次按最新记录实时重算
+- 页面：`frontend/src/pages/ReportsPage.tsx` + `frontend/src/hooks/useMonthlyReport.ts`
+
 ## 枚举/常量出现位置清单
 
 - DeviceType: constants/DeviceType、types/DeviceType、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - InspectionStatus: constants/InspectionStatus、types/InspectionStatus、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
 - HazardSeverity: constants/HazardSeverity、types/HazardSeverity、constructors、logTemplates、errorMessages、筛选器、展示组件/控制器均有引用。
+- ReportArchiveStatus: constants/ReportArchiveStatus、constructors/MonthlyReportConstructor、pages/ReportsPage 引用。
+- AdjustmentKind: constants/AdjustmentKind、utils/monthlyReportStats、constructors/ReportAdjustmentConstructor、pages/ReportsPage 引用。
 
 ## 为什么会牵一发动全身
 
